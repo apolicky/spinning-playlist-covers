@@ -1,13 +1,18 @@
+import html2canvas from "html2canvas";
 import { useRef } from "react";
 
 export const CoverImage = (props: { date: Date; overlayColor: string; blur: number }) => {
     const canvasRef2 = useRef<HTMLDivElement>(null);
-    const { date, overlayColor, blur } = props;
+    const { date } = props;
 
     // Function to trigger the download
-    const handleDownload = () => {
+    const handleDownload = async () => {
         const canvas = canvasRef2.current;
-        const image = canvas?.toDataURL("image/png"); // Convert to PNG data URL
+        if (!canvas) {
+            return;
+        }
+
+        const image = await html2canvas(canvas).then((c) => c.toDataURL("image/png")); // Convert to PNG data URL
 
         // Create a link and trigger a download
         const link = document.createElement("a");
