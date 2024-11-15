@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useRef, useState } from "react";
+import { CoverImage } from "./CoverImage";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function () {
+    const formRef = useRef(null);
+    const [date, setDate] = useState(new Date());
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const handleCreateCover = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        const target = e.target as typeof e.target & {
+            date: { value: string };
+        };
+        setDate(new Date(target.date.value));
+
+        console.log(date);
+    };
+
+    const defaultValue = date.toLocaleDateString("en-CA");
+
+    return (
+        <>
+            <h1 className="text-6xl dark:text-white font-bold">Spinning playlist cover creator</h1>
+            <form ref={formRef} onSubmit={handleCreateCover}>
+                <div>
+                    <label>
+                        Date:
+                        <input type="date" name="date" defaultValue={defaultValue} />
+                    </label>
+                </div>
+                <div>
+                    <input type="submit" value="Create cover" />
+                </div>
+            </form>
+            <CoverImage date={date} overlayColor="rgba(0, 40, 0, 0.5)" blur={0.5} />
+        </>
+    );
 }
-
-export default App
