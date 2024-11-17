@@ -1,37 +1,36 @@
-import { useRef, useState } from "react";
-import { CoverImage } from "./CoverImage";
+import { useState } from "react";
+import { ImageGenerator } from "./ImageGenerator";
+import { ColorPicker } from "./ColorPicker";
 
 export default function () {
-    const formRef = useRef(null);
     const [date, setDate] = useState(new Date());
+    const [overlayColor, setOverlayColor] = useState("bg-red-950/50");
 
     const handleCreateCover = (e: React.SyntheticEvent) => {
+        console.log(e);
         e.preventDefault();
-        const target = e.target as typeof e.target & {
-            date: { value: string };
-        };
-        setDate(new Date(target.date.value));
-
-        console.log(date);
+        const target = e.target as typeof e.target & { value: string };
+        setDate(new Date(target.value));
     };
 
-    const defaultValue = date.toLocaleDateString("en-CA");
-
     return (
-        <>
-            <h1 className="text-6xl dark:text-white font-bold">Spinning playlist cover creator</h1>
-            <form ref={formRef} onSubmit={handleCreateCover}>
-                <div>
-                    <label>
-                        Date:
-                        <input type="date" name="date" defaultValue={defaultValue} />
-                    </label>
-                </div>
-                <div>
-                    <input type="submit" value="Create cover" />
-                </div>
-            </form>
-            <CoverImage date={date} overlayColor="rgba(0, 40, 0, 0.5)" blur={0.5} />
-        </>
+        <main className="max-w-screen-lg mx-auto dark:bg-black dark:*:text-white">
+            <h1 className="text-6xl font-bold">Spinning playlist cover creator</h1>
+            <div className="max-w-[669px] my-2">
+                <label>
+                    Date:
+                    <input
+                        className="ml-2 dark:text-gray-500"
+                        type="date"
+                        name="date"
+                        defaultValue={date.toLocaleDateString("en-CA")}
+                        onChange={handleCreateCover}
+                    />
+                </label>
+                <div>Color: </div>
+                <ColorPicker selectedColor={overlayColor} setSelectedColor={setOverlayColor} />
+            </div>
+            <ImageGenerator date={date} overlayColor={overlayColor} blur={0.5} />
+        </main>
     );
 }
