@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { ImageGenerator } from "./ImageGenerator";
 import { ColorPicker } from "./ColorPicker";
+import { availableImages, ImageSource } from "./CoverImage";
 
 export default function () {
     const [date, setDate] = useState(new Date());
     const [overlayColor, setOverlayColor] = useState("bg-red-950/50");
+    const [imageSrcBgTailwindTag, setImageSrcBgTailwindTag] = useState<ImageSource>("bg-[url('./assets/painting-blurred.png')]");
 
     const handleCreateCover = (e: React.SyntheticEvent) => {
         console.log(e);
@@ -30,7 +32,12 @@ export default function () {
                 <div>Color: </div>
                 <ColorPicker selectedColor={overlayColor} setSelectedColor={setOverlayColor} />
             </div>
-            <ImageGenerator date={date} overlayColor={overlayColor} blur={0.5} />
+            <div className="flex flex-row gap-2 mb-2">
+                {availableImages.map((image, index) => (
+                    <div key={image + index} className={`w-[50px] h-[50px] ${image}`} onClick={() => setImageSrcBgTailwindTag(image)} />
+                ))}
+            </div>
+            <ImageGenerator date={date} overlayColor={overlayColor} blur={0.5} imageSource={imageSrcBgTailwindTag} />
         </main>
     );
 }

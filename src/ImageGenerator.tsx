@@ -1,16 +1,16 @@
 import html2canvas from "html2canvas";
 import { useEffect, useRef, useState } from "react";
-import { CoverImage } from "./CoverImage";
+import { CoverImage, ImageSource } from "./CoverImage";
 
-export const ImageGenerator = (props: { date: Date; overlayColor: string; blur: number }) => {
+export const ImageGenerator = (props: { date: Date; overlayColor: string; blur: number; imageSource: ImageSource }) => {
     const canvasRef2 = useRef<HTMLDivElement>(null);
     const imgRef = useRef<HTMLImageElement>(null);
     const [imageSrc, setImageSrc] = useState("");
-    const { date, overlayColor, blur } = props;
+    const { date, overlayColor, blur, imageSource } = props;
 
     useEffect(() => {
         generateImage();
-    }, [date, overlayColor, blur]);
+    }, [date, overlayColor, blur, imageSource]);
 
     // Function to trigger the download
     const handleDownload = async () => {
@@ -40,7 +40,7 @@ export const ImageGenerator = (props: { date: Date; overlayColor: string; blur: 
                 <div>Preview:</div>
                 <img ref={imgRef} alt="generated cover" src={imageSrc} />
                 <div className="fixed -top-[1000px] -left-[1000px]" ref={canvasRef2}>
-                    <CoverImage date={date} overlayColor={overlayColor} />
+                    <CoverImage date={date} overlayColor={overlayColor} imageSourceBg={imageSource} />
                 </div>
             </div>
             <button
